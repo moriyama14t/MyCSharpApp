@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyCsharpApp.AnimalPractice {
+namespace MyCSharpApp.AnimalPractice {
 
     // 【abstract】（抽象クラス）
     // ・abstract キーワードを付けると、このクラスは抽象クラスになり、直接インスタンス化(new)できない
@@ -14,17 +14,25 @@ namespace MyCsharpApp.AnimalPractice {
             Name = name;
         }
         
-        // 【abstract メソッド】
-        // ・抽象メソッドは実装を持たず、派生クラスで必ず実装しないと「コンパイルエラー」になる！！！
-        public abstract void MakeSound();
-        
         // 【virtual】（仮想メソッド）
         // ・virtual キーワードを付けると、このメソッドは派生クラスでオーバーライド（override）可能になる。
         // ・基本的な自己紹介の処理を定義しておき、必要に応じて派生クラスで拡張できます。
-        public virtual void Introduce() {
-            Console.WriteLine($"私は動物です。私の名前は {Name} です。");
+        public virtual void MakeSound(){
+            Console.WriteLine("これはbaseクラスのMakeSoundメソッドです。");
         }
+        
+        // 【abstract メソッド】
+        // ・抽象メソッドは実装を持たず、派生クラスで必ず実装しないと「コンパイルエラー」になる！！！
+        public abstract void Introduce();
     }
+
+    // 【Animalをインタアーフェースで実現しようとすると以下】
+    // 　public interface IAnimal {
+    // 　　string Name { get; set; }
+    // 　　void MakeSound();
+    // 　　void Introduce();
+    //　}
+    // 状態の保持ができない（通常）
 
     // 【interface】（インターフェース）
     // ・interface はクラスが実装すべきメソッドなどを定義
@@ -42,12 +50,11 @@ namespace MyCsharpApp.AnimalPractice {
         // ・override キーワードは、基底クラスのabstractまたはvirtualメソッドの実装を
         //   派生クラスで上書きすることを示します。
         public override void MakeSound() {
+            base.MakeSound();
             Console.WriteLine($"{Name} は吠えます：ワンワン！");
         }
         
         public override void Introduce() {
-            // 基底クラスのIntroduce()の処理を呼び出す場合は、baseを使用します。
-            base.Introduce();
             Console.WriteLine("私は犬です。");
         }
         
@@ -65,8 +72,9 @@ namespace MyCsharpApp.AnimalPractice {
             Console.WriteLine($"{Name} は鳴きます：ニャー！");
         }
         
-        // CatはIWalkableを実装していないので、Walk()は定義しない。
-        // Introduce()は基底クラスのまま
+        public override void Introduce() {
+            Console.WriteLine("私は猫です。");
+        }
     }
 
     // エントリーポイント
@@ -79,11 +87,7 @@ namespace MyCsharpApp.AnimalPractice {
             // 犬の自己紹介と鳴き声
             dog.Introduce();
             dog.MakeSound();
-            // IWalkableインターフェースの実装なのでキャストしてWalk()を呼び出す
-            // dog.walk();だと'Animal' に 'walk' の定義が含まれておらず、でエラーになる
-            if (dog is IWalkable walker) {
-                walker.Walk();
-            }
+
             
             // 猫の自己紹介と鳴き声
             cat.Introduce();
